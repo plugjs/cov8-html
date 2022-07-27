@@ -6,6 +6,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
+    "jsx": "preserve",
     "baseUrl": "."
   },
   "include": [
