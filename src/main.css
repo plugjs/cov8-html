@@ -13,44 +13,6 @@ body {
   cursor: pointer;
 }
 
-.xicon {
-  color: #999;
-  position: absolute;
-  top: 0.2em;
-}
-
-pre[class*=language-],
-code[class*=language-] {
-  font-family: 'Source Code Pro',monospace;
-  font-size: 18px;
-  background-color: rgba(255,255,255, 0);
-  line-height: normal;
-  text-shadow: none;
-}
-
-pre[class*=language-] {
-  border-top: 1px solid #999;
-  border-bottom: 1px solid #999;
-  border-right: 1px solid #999;
-  padding: 0;
-  margin: 0;
-
-  .line-numbers-rows {
-    background-color: rgba(0, 0, 0, 0.125);
-    border-left: 1px solid #999;
-    border-right: 1px solid #999;
-  }
-
-  .token {
-    background-color: transparent;
-  }
-
-  &.highlight-skipped .coverage-skipped { background-color: rgba(0, 0, 0, 0.0625) }
-  &.highlight-ignored .coverage-ignored { background-color: rgba(0, 0, 0, 0.125) }
-  &.highlight-missing .coverage-missing { background-color: rgba(255, 0, 0, 0.125) }
-  &.highlight-covered .coverage-covered { background-color: rgba(0, 255, 0, 0.125) }
-}
-
 .coverage {
   font-family: 'Source Code Pro',monospace;
   font-weight: normal;
