@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 20px;
+  padding: 1em;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.xicon {
+  color: #999;
+  position: absolute;
+  top: 0.2em;
+}
+
+pre[class*=language-],
+code[class*=language-] {
+  font-family: 'Source Code Pro',monospace;
+  font-size: 18px;
+  background-color: rgba(255,255,255, 0);
+  line-height: normal;
+  text-shadow: none;
+}
+
+pre[class*=language-] {
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  border-right: 1px solid #999;
+  padding: 0;
+  margin: 0;
+
+  .line-numbers-rows {
+    background-color: rgba(0, 0, 0, 0.125);
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+  }
+
+  .token {
+    background-color: transparent;
+  }
+
+  &.highlight-skipped .coverage-skipped { background-color: rgba(0, 0, 0, 0.0625) }
+  &.highlight-ignored .coverage-ignored { background-color: rgba(0, 0, 0, 0.125) }
+  &.highlight-missing .coverage-missing { background-color: rgba(255, 0, 0, 0.125) }
+  &.highlight-covered .coverage-covered { background-color: rgba(0, 255, 0, 0.125) }
+}
+
+.coverage {
+  font-family: 'Source Code Pro',monospace;
+  font-weight: normal;
+  margin-left: 1em;
+  font-size: 0.6em;
+  border: 1px solid #666;
+  background-color: #ddd;
+  border-radius: 5px;
+  padding: 0 0.5em;
+  position: relative;
+  top: -0.15em;
+  color: #666;
+
+  &.coverage-ok {
+    color: #060;
+    border-color: #060;
+    background-color: #dfd;
+  }
+
+  &.coverage-warning {
+    color: #630;
+    border-color: #630;
+    background-color: #fe9;
+  }
+
+  &.coverage-error {
+    color: #600;
+    border-color: #600;
+    background-color: #fdd;
+  }
+}
