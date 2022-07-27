@@ -34,7 +34,7 @@
   </main>
 
   <footer>
-    Generated with <a href="#">PlugJS Cov8</a> on
+    Generated with <a href="https://github.com/plugjs/cov8">PlugJS Cov8</a> on
     <span class="date">{{ reportDate }}</span>.
   </footer>
 </template>
