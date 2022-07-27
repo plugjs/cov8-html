@@ -2,43 +2,47 @@
   <div class="highlights">
     <div class="highlights-groups">
       <span class="highlights-group">
-        <input type="checkbox" id="covered" v-model="highlightCovered"/>
+        <input id="covered" v-model="highlightCovered" type="checkbox">
         <label for="covered">covered</label>
       </span>
 
       <span class="highlights-group">
-        <input type="checkbox" id="missing" v-model="highlightMissing"/>
+        <input id="missing" v-model="highlightMissing" type="checkbox">
         <label for="missing">missing</label>
       </span>
 
       <span class="highlights-group">
-        <input type="checkbox" id="ignored" v-model="highlightIgnored"/>
+        <input id="ignored" v-model="highlightIgnored" type="checkbox">
         <label for="ignored">ignored</label>
       </span>
 
       <span class="highlights-group">
-        <input type="checkbox" id="skipped" v-model="highlightSkipped"/>
+        <input id="skipped" v-model="highlightSkipped" type="checkbox">
         <label for="skipped">skipped</label>
       </span>
     </div>
   </div>
 
-  <pre class="language-typescript line-numbers" :class="{
-    'highlight-covered': highlightCovered,
-    'highlight-missing': highlightMissing,
-    'highlight-ignored': highlightIgnored,
-    'highlight-skipped': highlightSkipped,
-  }"><code ref="code"></code></pre>
+  <pre
+    class="language-typescript line-numbers"
+    :class="{
+      'highlight-covered': highlightCovered,
+      'highlight-missing': highlightMissing,
+      'highlight-ignored': highlightIgnored,
+      'highlight-skipped': highlightSkipped,
+    }"
+  ><code ref="code" /></pre>
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from '@vue/runtime-core'
+  import { defineComponent, PropType } from 'vue'
 
   export default defineComponent({
     name: 'Highlight',
     props: {
       result: {
         type: Object as PropType<CoverageResult>,
+        default: undefined,
         required: false,
       },
     },
@@ -48,34 +52,6 @@
       highlightIgnored: true,
       highlightSkipped: false,
     }),
-
-    mounted() {
-      try {
-        const preferences = localStorage.getItem('__coverageHighlights__')
-        const highlights = JSON.parse(preferences || '{}')
-        if (highlights.covered !== undefined) this.highlightCovered = !!highlights.covered
-        if (highlights.missing !== undefined) this.highlightMissing = !!highlights.missing
-        if (highlights.ignored !== undefined) this.highlightIgnored = !!highlights.ignored
-        if (highlights.skipped !== undefined) this.highlightSkipped = !!highlights.skipped
-      } catch (error) {
-        // swallow
-      }
-    },
-
-    methods: {
-      savePreferences() {
-        try {
-          localStorage.setItem('__coverageHighlights__', JSON.stringify({
-            covered: this.highlightCovered,
-            missing: this.highlightMissing,
-            ignored: this.highlightIgnored,
-            skipped: this.highlightSkipped,
-          }))
-        } catch (error) {
-          // swallow
-        }
-      },
-    },
     watch: {
       highlightCovered() {
         this.savePreferences()
@@ -129,8 +105,36 @@
         element.append(...spans)
 
         Prism.highlightElement(element)
+      },
+    },
+
+    mounted() {
+      try {
+        const preferences = localStorage.getItem('__coverageHighlights__')
+        const highlights = JSON.parse(preferences || '{}')
+        if (highlights.covered !== undefined) this.highlightCovered = !!highlights.covered
+        if (highlights.missing !== undefined) this.highlightMissing = !!highlights.missing
+        if (highlights.ignored !== undefined) this.highlightIgnored = !!highlights.ignored
+        if (highlights.skipped !== undefined) this.highlightSkipped = !!highlights.skipped
+      } catch (error) {
+        // swallow
       }
-    }
+    },
+
+    methods: {
+      savePreferences() {
+        try {
+          localStorage.setItem('__coverageHighlights__', JSON.stringify({
+            covered: this.highlightCovered,
+            missing: this.highlightMissing,
+            ignored: this.highlightIgnored,
+            skipped: this.highlightSkipped,
+          }))
+        } catch (error) {
+          // swallow
+        }
+      },
+    },
   })
 </script>
 

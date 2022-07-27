@@ -8,12 +8,14 @@
 
       {{ result ? file : 'Coverage Report' }}
 
-      <span :class="{
-        'coverage': true,
-        'coverage-error': nodeCoverage.coverage < thresholds.minimumCoverage,
-        'coverage-warning': nodeCoverage.coverage < thresholds.optimalCoverage,
-        'coverage-ok': nodeCoverage.coverage >= thresholds.optimalCoverage,
-      }">{{ nodeCoverage.coverage }}%</span>
+      <span
+        :class="{
+          'coverage': true,
+          'coverage-error': nodeCoverage.coverage < thresholds.minimumCoverage,
+          'coverage-warning': nodeCoverage.coverage < thresholds.optimalCoverage,
+          'coverage-ok': nodeCoverage.coverage >= thresholds.optimalCoverage,
+        }"
+      >{{ nodeCoverage.coverage }}%</span>
     </h1>
     <p class="details">
       <span class="group">Covered: <span class="number">{{ nodeCoverage.coveredNodes }}</span> nodes</span>
@@ -24,11 +26,11 @@
   </header>
 
   <nav :class="{ visible: !result }">
-    <tree :tree="report.tree" :report="report" @selected="selected"></tree>
+    <tree :tree="report.tree" :report="report" @selected="selected" />
   </nav>
 
   <main :class="{ visible: !!result }">
-    <highlight :result="result"/>
+    <highlight :result="result" />
   </main>
 
   <footer>
@@ -38,7 +40,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, nextTick, PropType } from '@vue/runtime-core'
+  import { defineComponent, PropType } from 'vue'
   import { DocumentBulletListMultiple24Regular, DocumentArrowLeft24Regular } from '@vicons/fluent'
   import { Icon } from '@vicons/utils'
 
@@ -63,13 +65,6 @@
     data: () => ({
       file: undefined as CoveredFile | undefined,
     }),
-
-    mounted() {
-      window.addEventListener('hashchange', () => {
-        this.selected(window.location.hash.substring(1))
-      })
-      this.selected(window.location.hash.substring(1))
-    },
 
     computed: {
       thresholds(): { minimumCoverage: number, optimalCoverage: number } {
@@ -96,7 +91,14 @@
           dateStyle: 'medium',
           timeStyle: 'medium',
         }).format(date)
-      }
+      },
+    },
+
+    mounted() {
+      window.addEventListener('hashchange', () => {
+        this.selected(window.location.hash.substring(1))
+      })
+      this.selected(window.location.hash.substring(1))
     },
 
     methods: {

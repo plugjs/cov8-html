@@ -1,14 +1,14 @@
 <template>
   <ul>
-    <li v-for="(value, key) in tree" :class="isFile(key) ? 'file' : 'tree'">
-      <span @click="click(key)" class="pointer">
+    <li v-for="(value, key) in tree" :key="key" :class="isFile(key) ? 'file' : 'tree'">
+      <span class="pointer" @click="click(key)">
         <icon>
           <document-text24-regular v-if="isFile(key)" />
           <folder24-regular v-else-if="isOpen(key)" />
           <folder-add24-regular v-else />
         </icon>
         {{ key }}
-        <span v-for="result of coverage(value)" :class="[ 'coverage', result.clazz ]">
+        <span v-for="(result, i) of coverage(value)" :key="i" :class="[ 'coverage', result.clazz ]">
           {{ result.coverage }}%
         </span>
       </span>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from '@vue/runtime-core'
+  import { defineComponent, PropType } from 'vue'
   import { FolderAdd24Regular, Folder24Regular, DocumentText24Regular } from '@vicons/fluent'
   import { Icon } from '@vicons/utils'
 
@@ -73,8 +73,8 @@
         } else {
           this.collapsed[key] = !this.collapsed[key]
         }
-      }
-    }
+      },
+    },
   })
 </script>
 
