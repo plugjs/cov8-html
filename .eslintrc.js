@@ -59,12 +59,6 @@ module.exports = {
     // Allow TypeScript triple-slash comments
     'spaced-comment': [ 'error', 'always', { 'markers': [ '/ <reference' ] } ],
 
-    // Restricted imports
-    'no-restricted-imports': [ 'error', {
-      'name': 'vue',
-      'message': 'Please use "@vue/runtime-core',
-    } ],
-
     /* OFF RULES */
     'camelcase': [ 'off' ], // do not require camelCase variables
     'guard-for-in': [ 'off' ], // allow unchecked for-in loops
