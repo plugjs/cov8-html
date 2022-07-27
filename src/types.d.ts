@@ -1,6 +1,14 @@
+/* ========================================================================== *
+ * COVERAGE REPORT FILE STRUCTURE                                             *
+ * ========================================================================== */
+
+/**
+ * Differentiate between keys in the tree nad reference to covered files
+ * in report results
+ */
 type CoveredFile = string & { __brand_covered_file: never }
 
-
+/** Our coverage tree (one path component per level) */
 interface CoverageTree {
   [ key: string ]: CoveredFile | CoverageTree
 }
@@ -37,25 +45,39 @@ interface CoverageResult {
 
 /** Coverage thresholds */
 interface CoverageThresholds {
+  /** Minimum overall coverage */
   minimumCoverage: number,
+  /** Minimum per-file coverage */
   minimumFileCoverage: number,
+  /** Optimal overall coverage */
   optimalCoverage: number,
+  /** Optimal per-file coverage */
   optimalFileCoverage: number,
 }
-
 
 /** Aggregation of {@link CoverageResult} over all files */
 type CoverageResults = Record<CoveredFile, CoverageResult>
 
 /** Our coverage report, per file */
 interface CoverageReport {
+  /** Coverage results for all files */
   results: CoverageResults,
+  /** Thresholds for warnings and errors */
   thresholds: CoverageThresholds,
+  /** Overall per-node coverage stats */
   nodes: NodeCoverageResult,
+  /** Tree of all coverage results (one path component per level) */
   tree: CoverageTree,
+  /** Date (in ISO format) when the report was created */
   date: string,
 }
 
+/** Callback function for our JSONP-formatted report */
+declare function __initCoverage__(data: CoverageReport): void
+
+/* ========================================================================== *
+ * VUE JS FILE TYPE DECLARATION                                               *
+ * ========================================================================== */
 
 declare module '*.vue' {
   import { DefineComponent } from '@vue/runtime-core'
@@ -63,7 +85,9 @@ declare module '*.vue' {
   export default component
 }
 
-declare function __initCoverage__(data: CoverageReport): void
+/* ========================================================================== *
+ * MINIMALISTIC PRISM TYPES                                                   *
+ * ========================================================================== */
 
 declare namespace Prism {
   export function highlightElement(element: Element, async?: boolean, callback?: (element: Element) => void): void;
