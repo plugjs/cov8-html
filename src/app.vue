@@ -174,7 +174,6 @@
   }
 
   main {
-    margin-top: -1em;
     margin-bottom: 1em;
   }
 
