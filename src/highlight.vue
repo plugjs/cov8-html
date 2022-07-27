@@ -20,6 +20,10 @@
         <input id="skipped" v-model="highlightSkipped" type="checkbox">
         <label for="skipped">skipped</label>
       </span>
+
+      <span class="highlights-group">
+        &#x2630;
+      </span>
     </div>
   </div>
 
@@ -139,40 +143,118 @@
 </script>
 
 <style scoped lang="pcss">
-  pre {
-    border-radius: 5px 0 5px 5px;
-  }
-
+  /* Checkboxes for higlighting the coverage result */
   div.highlights {
     display: flex;
 
+    margin-top: 1em;
+    margin-bottom: -33px;
+    margin-right: 1px;
+    height: 32px;
+
+    /* Keep the highlights sticky on top */
+    position: sticky;
+    z-index: 999;
+    top: 0;
+
+    /* Wrap the check boxes with a nice (rounded) border */
     div.highlights-groups {
       margin-left: auto;
-      border-top: 1px solid #666;
-      border-left: 1px solid #666;
-      border-right: 1px solid #666;
-      border-radius: 5px 5px 0 0;
-
+      border-left: 1px solid #999;
+      border-bottom: 1px solid #999;
+      border-radius: 0px 5px 0px 5px;
+      background-color: #fff;
       padding: 0.125em;
 
+      /* Each highlight group is invisible (apart from the last one) */
       .highlights-group {
-        font-size: 0.75em;
+        display: none;
+        user-select: none;
+        font-size: 0.65em;
         padding: 0 0.5em;
 
-        &:nth-child(n+2) {
-          border-left: 1px solid #666;
-          margin-left: 0.25em;
+        border-right: 1px solid #999;
+        margin-right: 0.25em;
+
+        &:last-child {
+          border-right: none;
+          display: inline-block;
+          position: relative;
+          top: -0.2em;
+          margin-right: 0em;
         }
       }
 
-      checkbox {
-        scale: 0.75;
+      /* Show highlights groups when hovering */
+      &:hover .highlights-group {
+        display: inline-block;
       }
+
+
+      /* Nicer checkboxes (doubling as legends with colors) */
+      input[type="checkbox"] {
+        visibility: hidden;
+        position: relative;
+
+        &:before {
+          content: '\00A0';
+          visibility: visible;
+          border: 1px solid #666;
+          border-radius: 3px;
+          width: 0.75em;
+          height: 0.75em;
+          position: absolute;
+          background-color: transparent;
+        }
+
+        /* Show higlight colors as the "check" of the checkbox */
+        &#covered:checked:before { background-color: #9f9; }
+        &#missing:checked:before { background-color: #f99; }
+        &#ignored:checked:before { background-color: #ee0; }
+        &#skipped:checked:before { background-color: #ccc; }
+      }
+
+      /* Labels for check boxes */
       label {
         position: relative;
-        top: -0.1em;
-        padding-left: 0.5em;
+        padding-left: 0.25em;
+        top: -0.2em;
       }
     }
+  }
+
+  /* Basic modifications to PrismJS default theme */
+  pre[class*=language-],
+  code[class*=language-] {
+    font-family: 'Source Code Pro',monospace;
+    font-size: 18px;
+    background-color: transparent;
+    line-height: normal;
+    text-shadow: none;
+  }
+
+  /* Styling of our code highlight box */
+  pre[class*=language-] {
+    border-radius: 5px;
+    border: 1px solid #999;
+    padding: 0.5em 0;
+    margin: 0;
+
+    & :deep(.line-numbers-rows) {
+      background-color: rgba(0, 0, 0, 0.125);
+      border-right: 1px solid #999;
+      padding: 0.5em 0;
+      top: -0.5em;
+    }
+
+    & :deep(.token) {
+      background-color: transparent;
+    }
+
+    /* Only higlight the code when the checkbox is selected */
+    &.highlight-covered :deep(.coverage-covered) { background-color: rgba(153, 255, 153, 0.25); }
+    &.highlight-missing :deep(.coverage-missing) { background-color: rgba(255, 153, 153, 0.25) }
+    &.highlight-ignored :deep(.coverage-ignored) { background-color: rgba(238, 238, 0, 0.25); }
+    &.highlight-skipped :deep(.coverage-skipped) { background-color: rgba(204, 204, 204, 0.25); }
   }
 </style>
