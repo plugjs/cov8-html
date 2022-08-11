@@ -5,8 +5,6 @@ const path = require('node:path')
 
 const file = path.resolve(__dirname, 'dist', 'index.html')
 const html = fs.readFileSync(file, 'utf8')
+const initFunction = 'window.__initCoverage__'
 
-Object.defineProperties(exports, {
-  default: { value: html, enumerable: true },
-  __esModule: { value: true },
-})
+module.exports = { html, initFunction }

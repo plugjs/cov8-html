@@ -1,2 +1,2 @@
-declare const html: string
-export default html
+export const html: string
+export const initFunction: string

@@ -6,6 +6,5 @@ const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const file = path.resolve(__dirname, 'dist', 'index.html')
-const html = fs.readFileSync(file, 'utf8')
-
-export default html
+export const html = fs.readFileSync(file, 'utf8')
+export const initFunction = 'window.__initCoverage__'
