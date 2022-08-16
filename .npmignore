@@ -1,4 +1,5 @@
 *.tgz
+.*
 dist/report.js
 postcss.config.js
 src/*
