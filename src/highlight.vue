@@ -105,6 +105,21 @@
           start = end
         }
 
+        const last = code.substring(start, codeCoverage.length)
+        if (last) {
+          const clazz =
+            coverage <= -2 ? 'coverage-skipped' :
+            coverage == -1 ? 'coverage-ignored' :
+            coverage == 0 ? 'coverage-missing' :
+            'coverage-covered'
+          const span = document.createElement('span')
+          const text = document.createTextNode(last)
+
+          span.setAttribute('class', clazz)
+          span.appendChild(text)
+          spans.push(span)
+        }
+
         /* Append the spans and highlight */
         element.append(...spans)
 
