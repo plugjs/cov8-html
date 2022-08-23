@@ -136,7 +136,8 @@
         if (highlights.ignored !== undefined) this.highlightIgnored = !!highlights.ignored
         if (highlights.skipped !== undefined) this.highlightSkipped = !!highlights.skipped
       } catch (error) {
-        // swallow
+        // eslint-disable-next-line no-console
+        console.log('Error mounting highlight', error)
       }
     },
 
@@ -150,7 +151,8 @@
             skipped: this.highlightSkipped,
           }))
         } catch (error) {
-          // swallow
+          // eslint-disable-next-line no-console
+          console.log('Error saving preferences', error)
         }
       },
     },
