@@ -8,14 +8,9 @@
 
       {{ result ? file : 'Coverage Report' }}
 
-      <span
-        :class="{
-          'coverage': true,
-          'coverage-error': nodeCoverage.coverage < thresholds.minimumCoverage,
-          'coverage-warning': nodeCoverage.coverage < thresholds.optimalCoverage,
-          'coverage-ok': nodeCoverage.coverage >= thresholds.optimalCoverage,
-        }"
-      >{{ nodeCoverage.coverage }}%</span>
+      <span :class="[ 'coverage', coverage.clazz ]">
+        {{ coverage.percentage }}
+      </span>
     </h1>
     <p class="details">
       <span class="group">Covered: <span class="number">{{ nodeCoverage.coveredNodes }}</span> nodes</span>
@@ -79,6 +74,18 @@
 
       nodeCoverage(): NodeCoverageResult {
         return this.result?.nodeCoverage || this.report.nodes
+      },
+
+      coverage(): { clazz: string, percentage: string } {
+        const coverage = this.nodeCoverage.coverage
+        const clazz =
+          coverage === null ? 'coverage-unavailable' :
+          coverage < this.report.thresholds.minimumFileCoverage ? 'coverage-error' :
+          coverage < this.report.thresholds.optimalFileCoverage ? 'coverage-warning' :
+          'coverage-ok'
+        const percentage = coverage == null ? 'N/A' : `${coverage}%`
+
+        return { percentage, clazz }
       },
 
       result(): CoverageResult | undefined {

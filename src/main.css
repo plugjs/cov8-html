@@ -43,4 +43,10 @@ body {
     border-color: #600;
     background-color: #fdd;
   }
+
+  &.coverage-unavailable {
+    color: #333;
+    border-color: #333;
+    background-color: #ddd;
+  }
 }

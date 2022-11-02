@@ -24,7 +24,7 @@ interface NodeCoverageResult {
   /** Total number of nodes (sum of `covered`, `missing` and `ignored`) */
   totalNodes: number,
   /** Percentage of code coverage (covered as a % of total - ignored nodes)*/
-  coverage: number,
+  coverage: number | null,
 }
 
 /** Per-file coverage result */

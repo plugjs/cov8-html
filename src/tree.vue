@@ -9,7 +9,7 @@
         </icon>
         {{ key }}
         <span v-for="(result, i) of coverage(value)" :key="i" :class="[ 'coverage', result.clazz ]">
-          {{ result.coverage }}%
+          {{ result.percentage }}
         </span>
       </span>
 
@@ -45,17 +45,20 @@
       return { collapsed: {} as Record<string | number, boolean> }
     },
     methods: {
-      coverage(value: CoverageTree | CoveredFile): { clazz: string, coverage: number }[] {
+      coverage(value: CoverageTree | CoveredFile): { clazz: string, percentage: string }[] {
         if (typeof value !== 'string') return []
         const result = this.report.results[value]
+        if (! result) return []
 
         const coverage = result.nodeCoverage.coverage
         const clazz =
+          coverage === null ? 'coverage-unavailable' :
           coverage < this.report.thresholds.minimumFileCoverage ? 'coverage-error' :
           coverage < this.report.thresholds.optimalFileCoverage ? 'coverage-warning' :
           'coverage-ok'
+        const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
-        return result ? [ { coverage, clazz } ] : []
+        return [ { percentage, clazz } ]
       },
       isFile(key: string | number): boolean {
         return typeof this.tree[key] === 'string'
