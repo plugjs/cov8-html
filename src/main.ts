@@ -18,6 +18,7 @@ import './main.css'
 /* Callback for our JSONP-formatted report */
 window.__initCoverage__ = function(report: CoverageReport) {
   createApp(App, { report }).mount('#app')
+  // window.__coverageData__ = report
 }
 
 /** Hack to load our JSONO-formatted report (we use files...) */
