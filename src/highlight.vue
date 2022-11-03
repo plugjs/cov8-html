@@ -78,9 +78,10 @@
         /* Check whether have some coverage result */
         if (! result) return
 
-        /* Calculate all our spans */
+        /* Calculate all our spans and lines with missing coverage */
         const { code, codeCoverage } = result
         const spans: Element[] = []
+        const missingLines = new Set<number>()
         let coverage = codeCoverage[0] // > 1 ? 1 : codeCoverage[0]
         let start = 0
 
@@ -96,6 +97,12 @@
 
           const span = document.createElement('span')
           const text = document.createTextNode(code.substring(start, end))
+
+          if (coverage == 0) {
+            const startLine = code.substring(0, start).split('\n').length
+            const endLine = code.substring(0, end).split('\n').length
+            for (let l = startLine; l <= endLine; l++) missingLines.add(l)
+          }
 
           span.setAttribute('class', clazz)
           span.appendChild(text)
@@ -123,7 +130,18 @@
         /* Append the spans and highlight */
         element.append(...spans)
 
-        Prism.highlightElement(element)
+        /* Highlight elements and lines missing coverage */
+        Prism.highlightElement(element, false, () => {
+          const linesContainer = element.querySelector('.line-numbers-rows')
+          const linesElements = linesContainer?.childNodes
+          if (! linesElements) return
+
+          missingLines.forEach((line) => {
+            const lineElement = linesElements[line - 1] as HTMLElement | undefined
+            const elementStyle = lineElement?.style
+            if (elementStyle) elementStyle.backgroundColor = 'rgba(255,0,0,0.1)'
+          })
+        })
       },
     },
 
