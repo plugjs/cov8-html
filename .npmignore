@@ -1,7 +1,0 @@
-*.tgz
-.*
-dist/report.js
-postcss.config.js
-src/*
-tsconfig.json
-vite.config.ts
