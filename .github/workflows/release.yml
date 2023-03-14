@@ -33,6 +33,8 @@ jobs:
           git tag -a -m "v${VERSION}" "v${VERSION}" "${{ github.sha }}"
           git push --tags
 
+          git config user.email 'developers@juit.com'
+          git config user.name 'Github Workflows'
           gh release create "v${VERSION}" \
             --title "Release ${VERSION}" \
             --target "${{ github.sha }}" \
