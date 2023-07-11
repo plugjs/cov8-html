@@ -42,7 +42,7 @@
   import { defineComponent, PropType } from 'vue'
 
   export default defineComponent({
-    name: 'Highlight',
+    name: 'HighlightComponent',
     props: {
       result: {
         type: Object as PropType<CoverageResult>,

@@ -43,7 +43,7 @@
   import Highlight from './highlight.vue'
 
   export default defineComponent({
-    name: 'App',
+    name: 'AppComponent',
     components: {
       DocumentArrowLeft24Regular,
       DocumentBulletListMultiple24Regular,

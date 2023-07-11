@@ -13,7 +13,7 @@
         </span>
       </span>
 
-      <tree
+      <tree-component
         v-if="isTree(value)"
         :class="{ open: isOpen(key) }"
         :tree="value"
@@ -29,7 +29,7 @@
   import { Icon } from '@vicons/utils'
 
   export default defineComponent({
-    name: 'Tree',
+    name: 'TreeComponent',
     components: { Icon, FolderAdd24Regular, Folder24Regular, DocumentText24Regular },
     props: {
       report: {
