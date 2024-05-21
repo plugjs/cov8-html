@@ -8,8 +8,11 @@
           <folder-add24-regular v-else />
         </icon>
         {{ key }}
-        <span v-for="(result, i) of coverage(value)" :key="i" :class="[ 'coverage', result.clazz ]">
-          {{ result.percentage }}
+        <span v-for="(result, i) of coverage(value)" :key="i" class="coverage-group">
+          <span :class="[ 'coverage', result.clazz ]">{{ result.percentage }}</span>
+          <span v-if="result.percentageIgnored" class="coverage coverage-warning">
+            {{ result.percentageIgnored }}
+          </span>
         </span>
       </span>
 
@@ -24,9 +27,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { FolderAdd24Regular, Folder24Regular, DocumentText24Regular } from '@vicons/fluent'
+  import { DocumentText24Regular, Folder24Regular, FolderAdd24Regular } from '@vicons/fluent'
   import { Icon } from '@vicons/utils'
+  import { defineComponent, PropType } from 'vue'
 
   export default defineComponent({
     name: 'TreeComponent',
@@ -45,7 +48,7 @@
       return { collapsed: {} as Record<string | number, boolean> }
     },
     methods: {
-      coverage(value: CoverageTree | CoveredFile): { clazz: string, percentage: string }[] {
+      coverage(value: CoverageTree | CoveredFile): { clazz: string, percentage: string, percentageIgnored?: string }[] {
         if (typeof value !== 'string') return []
         const result = this.report.results[value]
         if (! result) return []
@@ -58,7 +61,14 @@
           'coverage-ok'
         const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
-        return [ { percentage, clazz } ]
+        const percentageIgnored =
+          result.nodeCoverage.ignoredNodes > 0 ?
+            result.nodeCoverage.totalNodes ?
+              `${Math.ceil(result.nodeCoverage.ignoredNodes / result.nodeCoverage.totalNodes * 100)}%` :
+              undefined : // zero total nodes (infinity)
+            undefined // zero ignored nodes
+
+        return [ { percentage, percentageIgnored, clazz } ]
       },
       isFile(key: string | number): boolean {
         return typeof this.tree[key] === 'string'

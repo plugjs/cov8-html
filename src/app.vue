@@ -8,8 +8,13 @@
 
       {{ result ? file : 'Coverage Report' }}
 
-      <span :class="[ 'coverage', coverage.clazz ]">
-        {{ coverage.percentage }}
+      <span class="coverage-group">
+        <span :class="[ 'coverage', coverage.clazz ]">
+          {{ coverage.percentage }}
+        </span>
+        <span v-if="coverage.percentageIgnored" class="coverage coverage-warning">
+          {{ coverage.percentageIgnored }}
+        </span>
       </span>
     </h1>
     <p class="details">
@@ -76,16 +81,23 @@
         return this.result?.nodeCoverage || this.report.nodes
       },
 
-      coverage(): { clazz: string, percentage: string } {
+      coverage(): { clazz: string, percentage: string, percentageIgnored?: string } {
         const coverage = this.nodeCoverage.coverage
         const clazz =
           coverage === null ? 'coverage-unavailable' :
-          coverage < this.report.thresholds.minimumFileCoverage ? 'coverage-error' :
-          coverage < this.report.thresholds.optimalFileCoverage ? 'coverage-warning' :
+          coverage < this.thresholds.minimumCoverage ? 'coverage-error' :
+          coverage < this.thresholds.optimalCoverage ? 'coverage-warning' :
           'coverage-ok'
         const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
-        return { percentage, clazz }
+        const percentageIgnored =
+          this.nodeCoverage.ignoredNodes > 0 ?
+            this.nodeCoverage.totalNodes ?
+              `${Math.ceil(this.nodeCoverage.ignoredNodes / this.nodeCoverage.totalNodes * 100)}%` :
+              undefined : // zero total nodes (infinity)
+            undefined // zero ignored nodes
+
+        return { percentage, percentageIgnored, clazz }
       },
 
       result(): CoverageResult | undefined {

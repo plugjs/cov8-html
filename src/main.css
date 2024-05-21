@@ -50,3 +50,16 @@ body {
     background-color: #ddd;
   }
 }
+
+.coverage-group .coverage:first-child:not(:last-child) {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right-color: #666;
+}
+
+.coverage-group .coverage:last-child:not(:first-child) {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left: none;
+  margin-left: 0px;
+}
