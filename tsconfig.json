@@ -1,18 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-    "jsx": "preserve",
-    "skipLibCheck": true,
-    "baseUrl": "."
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.vue",
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.app.json" },
   ],
-  "exclude": [ "node_modules" ]
+  "files": [],
 }
