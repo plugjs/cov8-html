@@ -27,68 +27,70 @@
 </template>
 
 <script lang="ts">
-  import { DocumentText24Regular, Folder24Regular, FolderAdd24Regular } from '@vicons/fluent'
-  import { Icon } from '@vicons/utils'
-  import { defineComponent, PropType } from 'vue'
+import { DocumentText24Regular, Folder24Regular, FolderAdd24Regular } from '@vicons/fluent'
+import { Icon } from '@vicons/utils'
+import { defineComponent } from 'vue'
 
-  export default defineComponent({
-    name: 'TreeComponent',
-    components: { Icon, FolderAdd24Regular, Folder24Regular, DocumentText24Regular },
-    props: {
-      report: {
-        type: Object as PropType<CoverageReport>,
-        required: true,
-      },
-      tree: {
-        type: Object as PropType<CoverageTree>,
-        required: true,
-      },
-    },
-    data() {
-      return { collapsed: {} as Record<string | number, boolean> }
-    },
-    methods: {
-      coverage(value: CoverageTree | CoveredFile): { clazz: string, percentage: string, percentageIgnored?: string }[] {
-        if (typeof value !== 'string') return []
-        const result = this.report.results[value]
-        if (! result) return []
+import type { PropType } from 'vue'
 
-        const coverage = result.nodeCoverage.coverage
-        const clazz =
+export default defineComponent({
+  name: 'TreeComponent',
+  components: { Icon, FolderAdd24Regular, Folder24Regular, DocumentText24Regular },
+  props: {
+    report: {
+      type: Object as PropType<CoverageReport>,
+      required: true,
+    },
+    tree: {
+      type: Object as PropType<CoverageTree>,
+      required: true,
+    },
+  },
+  data() {
+    return { collapsed: {} as Record<string | number, boolean> }
+  },
+  methods: {
+    coverage(value: CoverageTree | CoveredFile): { clazz: string, percentage: string, percentageIgnored?: string }[] {
+      if (typeof value !== 'string') return []
+      const result = this.report.results[value]
+      if (! result) return []
+
+      const coverage = result.nodeCoverage.coverage
+      const clazz =
           coverage === null ? 'coverage-unavailable' :
           coverage < this.report.thresholds.minimumFileCoverage ? 'coverage-error' :
           coverage < this.report.thresholds.optimalFileCoverage ? 'coverage-warning' :
           'coverage-ok'
-        const percentage = coverage == null ? 'N/A' : `${coverage}%`
+      const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
-        const percentageIgnored =
+      const percentageIgnored =
           result.nodeCoverage.ignoredNodes > 0 ?
             result.nodeCoverage.totalNodes ?
               `${Math.ceil(result.nodeCoverage.ignoredNodes / result.nodeCoverage.totalNodes * 100)}%` :
               undefined : // zero total nodes (infinity)
             undefined // zero ignored nodes
 
-        return [ { percentage, percentageIgnored, clazz } ]
-      },
-      isFile(key: string | number): boolean {
-        return typeof this.tree[key] === 'string'
-      },
-      isTree(value: CoverageTree | CoveredFile): value is CoverageTree {
-        return typeof value !== 'string'
-      },
-      isOpen(key: string | number): boolean {
-        return this.isFile(key) ? false : ! this.collapsed[key]
-      },
-      click(key: string | number): void {
-        const value = this.tree[key]
-        if (typeof value === 'string') {
-          window.location.hash = value
-        } else {
-          this.collapsed[key] = !this.collapsed[key]
-        }
-      },
+      return [ { percentage, percentageIgnored, clazz } ]
     },
-  })
+    isFile(key: string | number): boolean {
+      return typeof this.tree[key] === 'string'
+    },
+    isTree(value: CoverageTree | CoveredFile): value is CoverageTree {
+      return typeof value !== 'string'
+    },
+    isOpen(key: string | number): boolean {
+      return this.isFile(key) ? false : ! this.collapsed[key]
+    },
+    click(key: string | number): void {
+      const value = this.tree[key]
+      if (typeof value === 'string') {
+        window.location.hash = value
+      } else {
+        this.collapsed[key] = !this.collapsed[key]
+      }
+    },
+  },
+})
 </script>
 
 <style scoped lang="pcss">

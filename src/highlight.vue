@@ -39,142 +39,144 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 
-  export default defineComponent({
-    name: 'HighlightComponent',
-    props: {
-      result: {
-        type: Object as PropType<CoverageResult>,
-        default: undefined,
-        required: false,
-      },
+import type { PropType } from 'vue'
+
+export default defineComponent({
+  name: 'HighlightComponent',
+  props: {
+    result: {
+      type: Object as PropType<CoverageResult>,
+      default: undefined,
+      required: false,
     },
-    data: () => ({
-      highlightCovered: false,
-      highlightMissing: true,
-      highlightIgnored: true,
-      highlightSkipped: false,
-    }),
-    watch: {
-      highlightCovered() {
-        this.savePreferences()
-      },
-      highlightMissing() {
-        this.savePreferences()
-      },
-      highlightIgnored() {
-        this.savePreferences()
-      },
-      highlightSkipped() {
-        this.savePreferences()
-      },
+  },
+  data: () => ({
+    highlightCovered: false,
+    highlightMissing: true,
+    highlightIgnored: true,
+    highlightSkipped: false,
+  }),
+  watch: {
+    highlightCovered() {
+      this.savePreferences()
+    },
+    highlightMissing() {
+      this.savePreferences()
+    },
+    highlightIgnored() {
+      this.savePreferences()
+    },
+    highlightSkipped() {
+      this.savePreferences()
+    },
 
-      result(result: CoverageResult | undefined): void {
-        /* Wipe the element's children */
-        const element = this.$refs['code'] as Element
-        while (element.firstChild) element.lastChild?.remove()
+    result(result: CoverageResult | undefined): void {
+      /* Wipe the element's children */
+      const element = this.$refs['code'] as Element
+      while (element.firstChild) element.lastChild?.remove()
 
-        /* Check whether have some coverage result */
-        if (! result) return
+      /* Check whether have some coverage result */
+      if (! result) return
 
-        /* Calculate all our spans and lines with missing coverage */
-        const { code, codeCoverage } = result
-        const spans: Element[] = []
-        const missingLines = new Set<number>()
-        let coverage = codeCoverage[0] // > 1 ? 1 : codeCoverage[0]
-        let start = 0
+      /* Calculate all our spans and lines with missing coverage */
+      const { code, codeCoverage } = result
+      const spans: Element[] = []
+      const missingLines = new Set<number>()
+      let coverage = codeCoverage[0] // > 1 ? 1 : codeCoverage[0]
+      let start = 0
 
-        for (let end = 1; end < codeCoverage.length; end ++) {
-          const currentCoverage = codeCoverage[end] // > 1 ? 1 : codeCoverage[end]
-          if (currentCoverage == coverage) continue
+      for (let end = 1; end < codeCoverage.length; end ++) {
+        const currentCoverage = codeCoverage[end] // > 1 ? 1 : codeCoverage[end]
+        if (currentCoverage == coverage) continue
 
-          const clazz =
+        const clazz =
             coverage <= -2 ? 'coverage-skipped' :
             coverage == -1 ? 'coverage-ignored' :
             coverage == 0 ? 'coverage-missing' :
             'coverage-covered'
 
-          const span = document.createElement('span')
-          const text = document.createTextNode(code.substring(start, end))
+        const span = document.createElement('span')
+        const text = document.createTextNode(code.substring(start, end))
 
-          if (coverage == 0) {
-            const startLine = code.substring(0, start).split('\n').length
-            const endLine = code.substring(0, end).split('\n').length
-            for (let l = startLine; l <= endLine; l++) missingLines.add(l)
-          }
-
-          span.setAttribute('class', clazz)
-          span.appendChild(text)
-          spans.push(span)
-
-          coverage = currentCoverage
-          start = end
+        if (coverage == 0) {
+          const startLine = code.substring(0, start).split('\n').length
+          const endLine = code.substring(0, end).split('\n').length
+          for (let l = startLine; l <= endLine; l++) missingLines.add(l)
         }
 
-        const last = code.substring(start, codeCoverage.length)
-        if (last) {
-          const clazz =
+        span.setAttribute('class', clazz)
+        span.appendChild(text)
+        spans.push(span)
+
+        coverage = currentCoverage
+        start = end
+      }
+
+      const last = code.substring(start, codeCoverage.length)
+      if (last) {
+        const clazz =
             coverage <= -2 ? 'coverage-skipped' :
             coverage == -1 ? 'coverage-ignored' :
             coverage == 0 ? 'coverage-missing' :
             'coverage-covered'
-          const span = document.createElement('span')
-          const text = document.createTextNode(last)
+        const span = document.createElement('span')
+        const text = document.createTextNode(last)
 
-          span.setAttribute('class', clazz)
-          span.appendChild(text)
-          spans.push(span)
-        }
+        span.setAttribute('class', clazz)
+        span.appendChild(text)
+        spans.push(span)
+      }
 
-        /* Append the spans and highlight */
-        element.append(...spans)
+      /* Append the spans and highlight */
+      element.append(...spans)
 
-        /* Highlight elements and lines missing coverage */
-        Prism.highlightElement(element, false, () => {
-          const linesContainer = element.querySelector('.line-numbers-rows')
-          const linesElements = linesContainer?.childNodes
-          if (! linesElements) return
+      /* Highlight elements and lines missing coverage */
+      Prism.highlightElement(element, false, () => {
+        const linesContainer = element.querySelector('.line-numbers-rows')
+        const linesElements = linesContainer?.childNodes
+        if (! linesElements) return
 
-          missingLines.forEach((line) => {
-            const lineElement = linesElements[line - 1] as HTMLElement | undefined
-            const elementStyle = lineElement?.style
-            if (elementStyle) elementStyle.backgroundColor = 'rgba(255,0,0,0.1)'
-          })
+        missingLines.forEach((line) => {
+          const lineElement = linesElements[line - 1] as HTMLElement | undefined
+          const elementStyle = lineElement?.style
+          if (elementStyle) elementStyle.backgroundColor = 'rgba(255,0,0,0.1)'
         })
-      },
+      })
     },
+  },
 
-    mounted() {
+  mounted() {
+    try {
+      const preferences = localStorage.getItem('__coverageHighlights__')
+      const highlights = JSON.parse(preferences || '{}')
+      if (highlights.covered !== undefined) this.highlightCovered = !!highlights.covered
+      if (highlights.missing !== undefined) this.highlightMissing = !!highlights.missing
+      if (highlights.ignored !== undefined) this.highlightIgnored = !!highlights.ignored
+      if (highlights.skipped !== undefined) this.highlightSkipped = !!highlights.skipped
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('Error mounting highlight', error)
+    }
+  },
+
+  methods: {
+    savePreferences() {
       try {
-        const preferences = localStorage.getItem('__coverageHighlights__')
-        const highlights = JSON.parse(preferences || '{}')
-        if (highlights.covered !== undefined) this.highlightCovered = !!highlights.covered
-        if (highlights.missing !== undefined) this.highlightMissing = !!highlights.missing
-        if (highlights.ignored !== undefined) this.highlightIgnored = !!highlights.ignored
-        if (highlights.skipped !== undefined) this.highlightSkipped = !!highlights.skipped
+        localStorage.setItem('__coverageHighlights__', JSON.stringify({
+          covered: this.highlightCovered,
+          missing: this.highlightMissing,
+          ignored: this.highlightIgnored,
+          skipped: this.highlightSkipped,
+        }))
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log('Error mounting highlight', error)
+        console.log('Error saving preferences', error)
       }
     },
-
-    methods: {
-      savePreferences() {
-        try {
-          localStorage.setItem('__coverageHighlights__', JSON.stringify({
-            covered: this.highlightCovered,
-            missing: this.highlightMissing,
-            ignored: this.highlightIgnored,
-            skipped: this.highlightSkipped,
-          }))
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error saving preferences', error)
-        }
-      },
-    },
-  })
+  },
+})
 </script>
 
 <style scoped lang="pcss">

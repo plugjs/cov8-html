@@ -40,98 +40,100 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { DocumentBulletListMultiple24Regular, DocumentArrowLeft24Regular } from '@vicons/fluent'
-  import { Icon } from '@vicons/utils'
+import { defineComponent } from 'vue'
+import { DocumentBulletListMultiple24Regular, DocumentArrowLeft24Regular } from '@vicons/fluent'
+import { Icon } from '@vicons/utils'
 
-  import Tree from './tree.vue'
-  import Highlight from './highlight.vue'
+import Tree from './tree.vue'
+import Highlight from './highlight.vue'
 
-  export default defineComponent({
-    name: 'AppComponent',
-    components: {
-      DocumentArrowLeft24Regular,
-      DocumentBulletListMultiple24Regular,
-      Highlight,
-      Icon,
-      Tree,
+import type { PropType } from 'vue'
+
+export default defineComponent({
+  name: 'AppComponent',
+  components: {
+    DocumentArrowLeft24Regular,
+    DocumentBulletListMultiple24Regular,
+    Highlight,
+    Icon,
+    Tree,
+  },
+  props: {
+    report: {
+      type: Object as PropType<CoverageReport>,
+      required: true,
     },
-    props: {
-      report: {
-        type: Object as PropType<CoverageReport>,
-        required: true,
-      },
+  },
+  data: () => ({
+    file: undefined as CoveredFile | undefined,
+  }),
+
+  computed: {
+    thresholds(): { minimumCoverage: number, optimalCoverage: number } {
+      return this.file ? {
+        minimumCoverage: this.report.thresholds.minimumFileCoverage,
+        optimalCoverage: this.report.thresholds.optimalFileCoverage,
+      } : {
+        minimumCoverage: this.report.thresholds.minimumCoverage,
+        optimalCoverage: this.report.thresholds.optimalCoverage,
+      }
     },
-    data: () => ({
-      file: undefined as CoveredFile | undefined,
-    }),
 
-    computed: {
-      thresholds(): { minimumCoverage: number, optimalCoverage: number } {
-        return this.file ? {
-          minimumCoverage: this.report.thresholds.minimumFileCoverage,
-          optimalCoverage: this.report.thresholds.optimalFileCoverage,
-        } : {
-          minimumCoverage: this.report.thresholds.minimumCoverage,
-          optimalCoverage: this.report.thresholds.optimalCoverage,
-        }
-      },
+    nodeCoverage(): NodeCoverageResult {
+      return this.result?.nodeCoverage || this.report.nodes
+    },
 
-      nodeCoverage(): NodeCoverageResult {
-        return this.result?.nodeCoverage || this.report.nodes
-      },
-
-      coverage(): { clazz: string, percentage: string, percentageIgnored?: string } {
-        const coverage = this.nodeCoverage.coverage
-        const clazz =
+    coverage(): { clazz: string, percentage: string, percentageIgnored?: string } {
+      const coverage = this.nodeCoverage.coverage
+      const clazz =
           coverage === null ? 'coverage-unavailable' :
           coverage < this.thresholds.minimumCoverage ? 'coverage-error' :
           coverage < this.thresholds.optimalCoverage ? 'coverage-warning' :
           'coverage-ok'
-        const percentage = coverage == null ? 'N/A' : `${coverage}%`
+      const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
-        const percentageIgnored =
+      const percentageIgnored =
           this.nodeCoverage.ignoredNodes > 0 ?
             this.nodeCoverage.totalNodes ?
               `${Math.ceil(this.nodeCoverage.ignoredNodes / this.nodeCoverage.totalNodes * 100)}%` :
               undefined : // zero total nodes (infinity)
             undefined // zero ignored nodes
 
-        return { percentage, percentageIgnored, clazz }
-      },
-
-      result(): CoverageResult | undefined {
-        return this.file ? this.report.results[this.file] : undefined
-      },
-
-      reportDate(): string {
-        const date = new Date(this.report.date)
-        return new Intl.DateTimeFormat('en-US', {
-          dateStyle: 'medium',
-          timeStyle: 'medium',
-        }).format(date)
-      },
+      return { percentage, percentageIgnored, clazz }
     },
 
-    mounted() {
-      window.addEventListener('hashchange', () => {
-        this.selected(window.location.hash.substring(1))
-      })
+    result(): CoverageResult | undefined {
+      return this.file ? this.report.results[this.file] : undefined
+    },
+
+    reportDate(): string {
+      const date = new Date(this.report.date)
+      return new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'medium',
+      }).format(date)
+    },
+  },
+
+  mounted() {
+    window.addEventListener('hashchange', () => {
       this.selected(window.location.hash.substring(1))
-    },
+    })
+    this.selected(window.location.hash.substring(1))
+  },
 
-    methods: {
-      selected(file: string = '') {
-        if (file in this.report.results) {
-          this.file = file as CoveredFile
-          window.location.hash = file
-        } else {
-          this.file = undefined
-          window.location.hash = ''
-        }
-      },
+  methods: {
+    selected(file: string = '') {
+      if (file in this.report.results) {
+        this.file = file as CoveredFile
+        window.location.hash = file
+      } else {
+        this.file = undefined
+        window.location.hash = ''
+      }
     },
-  })
+  },
+})
 </script>
 
 <style scoped lang="pcss">

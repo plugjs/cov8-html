@@ -80,7 +80,7 @@ declare function __initCoverage__(data: CoverageReport): void
  * ========================================================================== */
 
 declare module '*.vue' {
-  import { DefineComponent } from '@vue/runtime-core'
+  import type { DefineComponent } from '@vue/runtime-core'
   const component: DefineComponent<{}, {}, any>
   export default component
 }
@@ -90,5 +90,5 @@ declare module '*.vue' {
  * ========================================================================== */
 
 declare namespace Prism {
-  export function highlightElement(element: Element, async?: boolean, callback?: (element: Element) => void): void;
+  export function highlightElement(element: Element, async?: boolean, callback?: (element: Element) => void): void
 }
