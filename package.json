@@ -1,11 +1,13 @@
 {
   "name": "@plugjs/cov8-html",
-  "version": "0.1.74",
+  "version": "0.1.75",
   "description": "Single-page-app to browse Cov8 reports",
   "main": "./index.cjs",
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "type": "module",
+  "author": "Team Juit <developers@juit.com>",
+  "license": "Apache-2.0",
   "exports": {
     ".": {
       "import": {
@@ -22,17 +24,15 @@
     "dev": "vite",
     "build": "npm run check && npm run lint && vite build",
     "check": "vue-tsc --noEmit",
-    "lint": "eslint src"
+    "lint": "TSESTREE_SINGLE_RUN=false eslint"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@plugjs/eslint-plugin": "^0.2.7",
     "@vicons/fluent": "^0.12.0",
     "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^5.0.5",
     "autoprefixer": "^10.4.19",
-    "eslint": "<9",
-    "eslint-config-google": "^0.14.0",
+    "eslint": "^9.7.0",
     "eslint-plugin-vue": "^9.27.0",
     "postcss-import": "^16.1.0",
     "postcss-nested": "^6.0.1",
@@ -41,8 +41,17 @@
     "vite": "^5.3.4",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-singlefile": "^2.0.2",
-    "vue": "^3.4.32",
+    "vue": "^3.4.33",
     "vue-tsc": "^2.0.26"
+  },
+  "files": [
+    "*.md",
+    "index.*",
+    "dist/index.html"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/plugjs/cov8-html.git"
   },
   "keywords": [
     "plugjs",
@@ -50,11 +59,8 @@
     "coverage",
     "nyc"
   ],
-  "author": "Team Juit <developers@juit.com>",
-  "license": "Apache-2.0",
-  "files": [
-    "*.md",
-    "index.*",
-    "dist/index.html"
-  ]
+  "bugs": {
+    "url": "https://github.com/plugjs/cov8-html/issues"
+  },
+  "homepage": "https://github.com/plugjs/cov8-html#readme"
 }
