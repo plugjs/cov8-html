@@ -1,6 +1,6 @@
 {
   "name": "@plugjs/cov8-html",
-  "version": "0.1.75",
+  "version": "0.1.76",
   "description": "Single-page-app to browse Cov8 reports",
   "main": "./index.cjs",
   "module": "./index.mjs",
@@ -27,21 +27,21 @@
     "lint": "TSESTREE_SINGLE_RUN=false eslint"
   },
   "devDependencies": {
-    "@plugjs/eslint-plugin": "^0.2.7",
+    "@plugjs/eslint-plugin": "^0.2.8",
     "@vicons/fluent": "^0.12.0",
     "@vicons/utils": "^0.1.4",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.7.0",
     "eslint-plugin-vue": "^9.27.0",
     "postcss-import": "^16.1.0",
-    "postcss-nested": "^6.0.1",
+    "postcss-nested": "^6.2.0",
     "prismjs": "^1.29.0",
-    "typescript": "^5.5.3",
-    "vite": "^5.3.4",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5",
     "vite-plugin-singlefile": "^2.0.2",
-    "vue": "^3.4.33",
-    "vue-tsc": "^2.0.26"
+    "vue": "^3.4.34",
+    "vue-tsc": "^2.0.29"
   },
   "files": [
     "*.md",
