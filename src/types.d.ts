@@ -85,6 +85,11 @@ declare module '*.vue' {
   export default component
 }
 
+declare module '*?url' {
+  export default string
+}
+
+
 /* ========================================================================== *
  * MINIMALISTIC PRISM TYPES                                                   *
  * ========================================================================== */
