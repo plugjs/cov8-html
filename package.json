@@ -22,9 +22,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run check && npm run lint && vite build",
+    "build": "vue-tsc --noEmit && eslit && vite build",
     "check": "vue-tsc --noEmit",
-    "lint": "TSESTREE_SINGLE_RUN=false eslint"
+    "lint": "eslint"
   },
   "devDependencies": {
     "@plugjs/eslint-plugin": "^0.2.16",
