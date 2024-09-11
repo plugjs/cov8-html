@@ -27,15 +27,18 @@
     </div>
   </div>
 
-  <pre
-    class="language-typescript line-numbers"
+  <div
+    id="source"
+    class="line-numbers"
     :class="{
       'highlight-covered': highlightCovered,
       'highlight-missing': highlightMissing,
       'highlight-ignored': highlightIgnored,
       'highlight-skipped': highlightSkipped,
     }"
-  ><code ref="code" /></pre>
+  >
+    <pre class="language-typescript"><code ref="code" /></pre>
+  </div>
 </template>
 
 <script lang="ts">
@@ -84,6 +87,7 @@ export default defineComponent({
       const { code, codeCoverage } = result
       const spans: Element[] = []
       const missingLines = new Set<number>()
+      const skippedLines = new Set<number>()
       let coverage = codeCoverage[0] // > 1 ? 1 : codeCoverage[0]
       let start = 0
 
@@ -100,10 +104,14 @@ export default defineComponent({
         const span = document.createElement('span')
         const text = document.createTextNode(code.substring(start, end))
 
-        if (coverage == 0) {
+        if (coverage === 0) {
           const startLine = code.substring(0, start).split('\n').length
           const endLine = code.substring(0, end).split('\n').length
           for (let l = startLine; l <= endLine; l++) missingLines.add(l)
+        } else if (coverage === -1) {
+          const startLine = code.substring(0, start).split('\n').length
+          const endLine = code.substring(0, end).split('\n').length
+          for (let l = startLine; l <= endLine; l++) skippedLines.add(l)
         }
 
         span.setAttribute('class', clazz)
@@ -138,10 +146,16 @@ export default defineComponent({
         const linesElements = linesContainer?.childNodes
         if (! linesElements) return
 
+        skippedLines.forEach((line) => {
+          const lineElement = linesElements[line - 1] as HTMLElement | undefined
+          const elementStyle = lineElement?.style
+          if (elementStyle) elementStyle.backgroundColor = 'rgba(255,255,0,0.5)'
+        })
+
         missingLines.forEach((line) => {
           const lineElement = linesElements[line - 1] as HTMLElement | undefined
           const elementStyle = lineElement?.style
-          if (elementStyle) elementStyle.backgroundColor = 'rgba(255,0,0,0.1)'
+          if (elementStyle) elementStyle.backgroundColor = 'rgba(255,0,0,0.15)'
         })
       })
     },
@@ -274,21 +288,26 @@ export default defineComponent({
   pre[class*=language-] {
     border-radius: 5px;
     border: 1px solid #999;
-    padding: 0.5em 0;
+    overflow: hidden;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     margin: 0;
 
     & :deep(.line-numbers-rows) {
       background-color: rgba(0, 0, 0, 0.125);
       border-right: 1px solid #999;
-      padding: 0.5em 0;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
       top: -0.5em;
     }
 
     & :deep(.token) {
       background-color: transparent;
     }
+  }
 
-    /* Only higlight the code when the checkbox is selected */
+  /* Only higlight the code when the checkbox is selected */
+  #source {
     &.highlight-covered :deep(.coverage-covered) { background-color: rgba(153, 255, 153, 0.25); }
     &.highlight-missing :deep(.coverage-missing) { background-color: rgba(255, 153, 153, 0.25) }
     &.highlight-ignored :deep(.coverage-ignored) { background-color: rgba(238, 238, 0, 0.25); }
