@@ -30,11 +30,12 @@ export default [
       parserOptions: {
         extraFileExtensions: [ '.vue' ],
         parser: '@typescript-eslint/parser',
-        project: [
-          './tsconfig.app.json',
-          './tsconfig.node.json',
-        ],
       },
+    },
+
+    rules: {
+      // This requires "projects", and "projects" doubles the linting time
+      '@typescript-eslint/no-floating-promises': [ 'off' ],
     },
   },
 
