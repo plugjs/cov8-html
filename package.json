@@ -1,6 +1,6 @@
 {
   "name": "@plugjs/cov8-html",
-  "version": "0.1.93",
+  "version": "0.1.94",
   "description": "Single-page-app to browse Cov8 reports",
   "main": "./index.cjs",
   "module": "./index.mjs",
@@ -27,12 +27,12 @@
     "lint": "eslint"
   },
   "devDependencies": {
-    "@plugjs/eslint-plugin": "^0.2.26",
+    "@plugjs/eslint-plugin": "^0.3.0",
     "@vicons/fluent": "^0.12.0",
     "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^5.2.0",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.14.0",
+    "eslint": "^9.15.0",
     "eslint-plugin-vue": "^9.31.0",
     "postcss-import": "^16.1.0",
     "postcss-nested": "^7.0.2",
@@ -40,7 +40,7 @@
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
     "vite-plugin-singlefile": "^2.0.3",
-    "vue": "^3.5.12",
+    "vue": "^3.5.13",
     "vue-tsc": "^2.1.10"
   },
   "files": [
