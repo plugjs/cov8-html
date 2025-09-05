@@ -96,10 +96,10 @@ export default defineComponent({
         if (currentCoverage == coverage) continue
 
         const clazz =
-            coverage <= -2 ? 'coverage-skipped' :
-            coverage == -1 ? 'coverage-ignored' :
-            coverage == 0 ? 'coverage-missing' :
-            'coverage-covered'
+          coverage <= -2 ? 'coverage-skipped' :
+          coverage == -1 ? 'coverage-ignored' :
+          coverage == 0 ? 'coverage-missing' :
+          'coverage-covered'
 
         const span = document.createElement('span')
         const text = document.createTextNode(code.substring(start, end))
@@ -125,10 +125,10 @@ export default defineComponent({
       const last = code.substring(start, codeCoverage.length)
       if (last) {
         const clazz =
-            coverage <= -2 ? 'coverage-skipped' :
-            coverage == -1 ? 'coverage-ignored' :
-            coverage == 0 ? 'coverage-missing' :
-            'coverage-covered'
+          coverage <= -2 ? 'coverage-skipped' :
+          coverage == -1 ? 'coverage-ignored' :
+          coverage == 0 ? 'coverage-missing' :
+          'coverage-covered'
         const span = document.createElement('span')
         const text = document.createTextNode(last)
 

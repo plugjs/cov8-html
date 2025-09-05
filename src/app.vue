@@ -86,18 +86,18 @@ export default defineComponent({
     coverage(): { clazz: string, percentage: string, percentageIgnored?: string } {
       const coverage = this.nodeCoverage.coverage
       const clazz =
-          coverage === null ? 'coverage-unavailable' :
-          coverage < this.thresholds.minimumCoverage ? 'coverage-error' :
-          coverage < this.thresholds.optimalCoverage ? 'coverage-warning' :
-          'coverage-ok'
+        coverage === null ? 'coverage-unavailable' :
+        coverage < this.thresholds.minimumCoverage ? 'coverage-error' :
+        coverage < this.thresholds.optimalCoverage ? 'coverage-warning' :
+        'coverage-ok'
       const percentage = coverage == null ? 'N/A' : `${coverage}%`
 
       const percentageIgnored =
-          this.nodeCoverage.ignoredNodes > 0 ?
-            this.nodeCoverage.totalNodes ?
-              `${Math.ceil(this.nodeCoverage.ignoredNodes / this.nodeCoverage.totalNodes * 100)}%` :
-              undefined : // zero total nodes (infinity)
-            undefined // zero ignored nodes
+        this.nodeCoverage.ignoredNodes > 0 ?
+          this.nodeCoverage.totalNodes ?
+            `${Math.ceil(this.nodeCoverage.ignoredNodes / this.nodeCoverage.totalNodes * 100)}%` :
+            undefined : // zero total nodes (infinity)
+          undefined // zero ignored nodes
 
       return { percentage, percentageIgnored, clazz }
     },
